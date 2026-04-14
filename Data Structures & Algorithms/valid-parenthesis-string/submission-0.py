@@ -1,26 +1,23 @@
 class Solution:
     def checkValidString(self, s: str) -> bool:
-        quotes, stars = deque([]), deque([])
+        low , high = 0, 0
 
-        for i, c in enumerate(s):
+        for c in s:
             if c == '(':
-                quotes.append((c,i))
-            elif c == '*':
-                stars.append((c, i))
+                low += 1
+                high += 1
+            elif c == ')':
+                low -= 1
+                high -= 1
             else:
-                if len(quotes) == 0 and len(stars) == 0:
-                    return False
-                elif len(quotes) > 0:
-                    quotes.pop()
-                else:
-                    stars.pop()
-
-
-        while len(quotes) > 0 and len(stars) > 0:
-            q = quotes.pop()
-            s = stars.pop()
-
-            if q[1] > s[1]:
+                low -= 1 #consider as )
+                high +=1 #consider as (
+            
+            if low < 0: #covers when * are considered to be closing character which can be ignored
+                low = 0
+            
+            if high < 0: #covers when we have a log of closing characters for which we dont have enough opening chracters despite of considering all * as opening
                 return False
 
-        return False if len(quotes) else True
+        return low == 0 # covers rest of the case like )( where you have pending low for which closing never was accounted for
+        
