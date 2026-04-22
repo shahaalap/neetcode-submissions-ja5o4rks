@@ -1,22 +1,13 @@
 class Solution:
     def rotate(self, matrix: List[List[int]]) -> None:
-
-        n = len(matrix)
-
-        #Transpose
-
-        for i in range(n):
-            for j in range(i + 1, n):
+        for i in range(len(matrix)):
+            for j in range(i + 1, len(matrix[i])):
                 matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
 
-        #Reverse Columns
+        for i in range(len(matrix)):
+            l, r = 0, len(matrix[i]) - 1
 
-        i, j = 0, n - 1
-
-        while i < j:
-            for row in range(n):
-                matrix[row][i], matrix[row][j] = matrix[row][j], matrix[row][i]
-                
-            i+=1
-            j-=1
-
+            while l < r:
+                matrix[i][l], matrix[i][r] = matrix[i][r], matrix[i][l]
+                l += 1
+                r -= 1
