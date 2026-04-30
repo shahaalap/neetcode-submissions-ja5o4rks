@@ -1,24 +1,23 @@
 class Solution:
     def checkValidString(self, s: str) -> bool:
-        low , high = 0, 0
+        left, star = [], []
 
-        for c in s:
+        for i, c in enumerate(s):
             if c == '(':
-                low += 1
-                high += 1
-            elif c == ')':
-                low -= 1
-                high -= 1
+                left.append(i)
+            elif c == '*':
+                star.append(i)
             else:
-                low -= 1 #consider )
-                high += 1 #consider (
+                if len(left):
+                    left.pop()
+                elif not len(left) and len(star):
+                    star.pop()
+                else:
+                    return False
 
-            if low < 0:
-                low = 0
+        while len(left) and len(star) and left[-1] < star[-1]:
+            left.pop()
+            star.pop()
 
-            if high < 0:
-                return False
+        return len(left) == 0
 
-
-        
-        return low == 0
